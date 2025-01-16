@@ -21,8 +21,8 @@ DEBUG = getenv("DEBUG") == '1'
 POSTGRES_USER = getenv("POSTGRES_USER")
 POSTGRES_PASSWORD = getenv("POSTGRES_PASSWORD")
 POSTGRES_DB = getenv("POSTGRES_DB")
-POSTGRES_HOST = getenv("POSTGRES_HOST")
-POSTGRES_PORT = getenv("POSTGRES_PORT")
+POSTGRES_HOST = getenv("POSTGRES_HOST") if not DEBUG else 'localhost'
+POSTGRES_PORT = getenv("POSTGRES_PORT") if not DEBUG else '5435'
 
 REDIS_HOST = getenv("REDIS_HOST", 'localhost')
 REDIS_PORT = getenv("REDIS_PORT", 6379)
@@ -47,7 +47,7 @@ KAFKA_BROKERCONNECT = getenv("KAFKA_BROKERCONNECT")
 engine = create_async_engine(
     DB_URL,
     pool_recycle=280,  
-    echo=not PRODUCTION_MODE,
+    echo=DEBUG,
 )
 
 async_session = async_sessionmaker(bind=engine, expire_on_commit=False)

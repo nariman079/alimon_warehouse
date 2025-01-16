@@ -10,6 +10,8 @@ services:
       - pg-data:/var/lib/postgresql/data
     networks:
       - main-network
+    ports:
+      - "5435:5432"
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-b", "${POSTGRES_DB}"]
       interval: 10s

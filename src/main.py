@@ -1,6 +1,5 @@
 from collections.abc import AsyncIterator, Awaitable, Callable
 from contextlib import asynccontextmanager
-from typing import Callable
 
 from fastapi import FastAPI, Request, Response
 

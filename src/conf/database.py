@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 from contextvars import ContextVar
-from typing import Any, Self, TypeVar
+from typing import Any, TypeVar
 
 from datetime import datetime
 

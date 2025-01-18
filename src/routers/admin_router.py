@@ -1,10 +1,8 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Body, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, status
 
 from src.depends import get_user
-from src.models import Cart, CartItem
-from src.schemas import CartItemCreate
 
 cart_router = APIRouter(tags=["admin"])
 

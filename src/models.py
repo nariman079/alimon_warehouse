@@ -19,12 +19,17 @@ class Unit(Base):
         'Product',
         back_populates='unit',
     )
+    receipt_lines = relationship(
+        'ReceiptLine',
+        back_populates='unit'
+    )
 
 class Product(Base):
     """
     Таблица "Продукт"
 
     sku (int): Артикул 
+    barcode (str): Штрих код
     title (str): Наименование 
     description (str): Описание 
     price (float): Стоимость 
@@ -36,7 +41,8 @@ class Product(Base):
     """
     __tablename__ = "products"
 
-    sku: Mapped[int] = mapped_column(nullable=False)
+    sku: Mapped[str] = mapped_column(nullable=False)
+    barcode: Mapped[str] = mapped_column(nullable=True)
     title: Mapped[str] = mapped_column(nullable=False)
     description: Mapped[str] = mapped_column(nullable=False)
     price: Mapped[float] = mapped_column(Numeric(10,2), nullable=False)
@@ -44,10 +50,11 @@ class Product(Base):
     is_active: Mapped[bool] = mapped_column(default=False, nullable=False)
 
     unit_id: Mapped[int] = mapped_column(ForeignKey('units.id'))
+    category_id: Mapped[int] = mapped_column(ForeignKey('categories.id'))
     unit = relationship(
         'Unit',
         back_populates='products',
-        lazy='jointed'
+        lazy='joined'
     )
     images = relationship(
         "Image", 
@@ -159,7 +166,7 @@ class WriteDownLine(Base):
     """
     __tablename__ = 'write_down_lines'
 
-    sku: Mapped[int] = mapped_column(nullable=False)
+    sku: Mapped[str] = mapped_column(nullable=False)
     quantity: Mapped[int] = mapped_column(nullable=False)
 
     write_down_id: Mapped[int] = mapped_column(ForeignKey('write_downs.id'))
@@ -209,13 +216,14 @@ class ReceiptLine(Base):
     """
     __tablename__ = 'receipt_lines'
 
-    sku: Mapped[int] = mapped_column()
+    sku: Mapped[str] = mapped_column()
 
     title: Mapped[str] = mapped_column(nullable=False)
     quantity: Mapped[int] = mapped_column(nullable=False)
     price: Mapped[float] = mapped_column(Numeric(10,2))
     total_price: Mapped[float] = mapped_column(Numeric(10,2))
 
+    unit_id: Mapped[int] = mapped_column(ForeignKey('units.id'))
     receipt_id: Mapped[int] = mapped_column(ForeignKey('receipts.id'))
     receipt = relationship(
         'Receipt',
@@ -275,7 +283,7 @@ class Adjustment(Base):
 class AdjustmentLine(Base):
     __tablename__ = 'adjustment_lines'
 
-    sku: Mapped[int] = mapped_column(nullable=False)
+    sku: Mapped[str] = mapped_column(nullable=False)
     quantity: Mapped[int] = mapped_column(nullable=False)
 
     adjustment_id: Mapped[int] = mapped_column(ForeignKey('adjustments.id'))

@@ -4,17 +4,17 @@ from fastapi import APIRouter, Depends, status
 
 from src.depends import get_user
 
-cart_router = APIRouter(tags=["admin"])
+admin_router = APIRouter(tags=["admin"])
 
 
-@cart_router.get("/products/")
+@admin_router.get("/products/")
 async def get_full_cart(
     user: Annotated[get_user, Depends()]
 ):
     """Получение товаров"""
     pass
 
-@cart_router.post(
+@admin_router.post(
     "/products/", 
     status_code=status.HTTP_201_CREATED
 )

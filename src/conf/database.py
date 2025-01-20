@@ -1,4 +1,5 @@
 from __future__ import annotations
+from functools import wraps
 
 from collections.abc import Sequence
 from contextvars import ContextVar
@@ -9,11 +10,12 @@ from datetime import datetime
 from sqlalchemy import MetaData, Row, Select, func, select
 from sqlalchemy.ext.asyncio import AsyncAttrs, AsyncSession
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.exc import IntegrityError, OperationalError
+from asyncpg.exceptions import NotNullViolationError, UniqueViolationError
 
 
 T = TypeVar("T", bound="MappingBase")
 session_context: ContextVar[AsyncSession | None] = ContextVar("session", default=None)
-
 
 class DBController:
     @property
@@ -92,7 +94,8 @@ class MappingBase:
         for key, value in kwargs.items():
             setattr(self, key, value)
         await db.session.flush()
-
+    
+    
     async def delete(self):
         await db.session.delete(self)
         await db.session.flush()

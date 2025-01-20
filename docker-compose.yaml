@@ -1,6 +1,7 @@
 services:    
   db:
     image: postgres:latest
+    container_name: pg_db
     env_file:
       - .env
     volumes:

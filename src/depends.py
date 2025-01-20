@@ -1,10 +1,9 @@
-from typing import Annotated
 
 import jwt
-from fastapi import HTTPException, Path, Request
+from fastapi import HTTPException, Request
 
 from src.conf.settings import ALGORITHM, SECRET
-from src.schemas import AuthUser
+from src.schemas.auth_schemas import AuthUser
 
 
 async def get_or_validate_access_data(raw_token: str) -> dict:

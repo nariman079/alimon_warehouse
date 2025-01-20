@@ -1,12 +1,11 @@
 from collections.abc import AsyncIterator, Awaitable, Callable
 from contextlib import asynccontextmanager
-from typing import Callable
 
 from fastapi import FastAPI, Request, Response
 
 from src.conf.database import Base, session_context
 from src.conf.settings import DEBUG, async_session, engine
-from src.routers import cart_router
+from src.routers.admin_router import admin_router
 
 
 async def reinit_database() -> None:  
@@ -24,7 +23,7 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 
 app = FastAPI(lifespan=lifespan)
 
-app.include_router(prefix="/api", router=cart_router.cart_router)
+app.include_router(prefix="/api", router=admin_router)
 
 
 @app.get("/ping")

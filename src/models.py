@@ -281,6 +281,14 @@ class Adjustment(Base):
     )
 
 class AdjustmentLine(Base):
+    """
+    Таблица "Позиция корректировки"
+    Аттрибуты:
+    sku (str): Артикул товара
+    quantity (int): Количество товара
+    adjustment_id (int): Объект корректировки к которому относится 
+        текущая позиция корректировки
+    """
     __tablename__ = 'adjustment_lines'
 
     sku: Mapped[str] = mapped_column(nullable=False)

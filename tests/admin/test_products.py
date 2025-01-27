@@ -20,7 +20,7 @@ async def session():
 
 
 @pytest.mark.asyncio
-async def test_create_product(session):
+async def test_create_product():
     unit = await Unit.create(title="шт")
     category = await Category.create(
         title="Category1", 
@@ -42,32 +42,8 @@ async def test_create_product(session):
 
 
 @pytest.mark.asyncio
-async def test_create_product(session):
-    unit_schema = UnitCreateSchema(
-        title="шт"
-    )
-    category_schema = CategoryCreateSchema(
-        title="new",
-        description="it is new category"
-    )
-
-    unit = await Unit.create(**unit_schema.model_dump())
-    category = await Category.create(**category_schema.model_dump())
-
-    product_schema = ProductCreateSchema(
-            sku="123",
-            title="title",
-            description="description",
-            price=2200,
-            stock_quantity=50,
-            unit_id=unit.id,
-            category_id=category.id
-        )
-    product = await Product.create(**product_schema.model_dump())
-    
-    assert unit.title == unit_schema.title
-    assert product.unit.title == unit_schema.title
-    assert product.category.title == category_schema.title
+async def test_get_product(session):
+    pass
 
 
 

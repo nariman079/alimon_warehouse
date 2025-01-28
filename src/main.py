@@ -8,20 +8,20 @@ from src.conf.settings import DEBUG, async_session, engine
 from src.routers.admin_router import admin_router
 
 
-async def reinit_database() -> None:  
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.drop_all)
-        await conn.run_sync(Base.metadata.create_all)
+# async def reinit_database() -> None:  
+#     async with engine.begin() as conn:
+#         await conn.run_sync(Base.metadata.drop_all)
+#         await conn.run_sync(Base.metadata.create_all)
 
 
-@asynccontextmanager
-async def lifespan(_: FastAPI) -> AsyncIterator[None]:
-    if DEBUG:
-        await reinit_database()
-    yield
+# @asynccontextmanager
+# async def lifespan(_: FastAPI) -> AsyncIterator[None]:
+#     if DEBUG:
+#         await reinit_database()
+#     yield
 
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI()
 
 app.include_router(prefix="/api", router=admin_router)
 

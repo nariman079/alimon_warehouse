@@ -49,8 +49,26 @@ class DBController:
 db: DBController = DBController()
 
 
+
+def handle_error(func):
+    @wraps(func)
+    async def wrapper(*args, **kwargs):
+        try:
+            return await func(*args, **kwargs)
+        except IntegrityError as error:
+            if "is not present in table" in str(error.orig):
+                detail = str(error.orig).split("DETAIL:")[-1].strip()
+                table_name = detail.split("table")[-1].split('"')[1]
+                column_name = detail.split("(")[1].split(")")[0]
+                value = detail.split("=")[-1].split(')')[0].replace("(", '')
+                raise ValueError(f"Значение '{value}' в колонке '{column_name}' отсутствует в таблице '{table_name}'")
+            else:
+                raise error
+    return wrapper
+
 class MappingBase:
     @classmethod
+    @handle_error
     async def create(cls: type[T], **kwargs: Any) -> T:
         instance = cls(**kwargs)
         db.session.add(instance)
@@ -90,12 +108,13 @@ class MappingBase:
             select(func.count(*expressions, **kwargs)).filter_by(**kwargs)
         )
 
+    @handle_error
     async def update(self, **kwargs: Any) -> None:
         for key, value in kwargs.items():
             setattr(self, key, value)
         await db.session.flush()
     
-    
+    @handle_error
     async def delete(self):
         await db.session.delete(self)
         await db.session.flush()

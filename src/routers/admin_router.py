@@ -21,7 +21,7 @@ from src.schemas.product_schemas import (
     CategoryCreateSchema,
     CategoryDisplaySchema,
     ProductListDisplaySchema
-    )
+)
 
 from src.schemas.filter_schemas import ProductFilter
 
@@ -48,7 +48,9 @@ async def create_cateogry(
 
 @admin_router.post('/v1/admin/units/')
 async def create_unit(
-    new_unit: Annotated[UnitCreateSchema, Body()]
+    new_unit: Annotated[
+        UnitCreateSchema, Body()
+    ]
 ):
     """Создание товара"""
     try:
@@ -62,8 +64,7 @@ async def create_unit(
 )
 async def create_product(
     new_product: Annotated[
-        ProductCreateSchema, 
-        Body()
+        ProductCreateSchema, Body()
     ]
 ):
     """Создание товара"""
@@ -78,7 +79,9 @@ async def create_product(
     response_model=list[ProductListDisplaySchema]
 )
 async def get_products(
-    filters: Annotated[ProductFilter, Depends()]
+    filters: Annotated[
+        ProductFilter, Depends()
+    ]
 ):
     """Получение списка товаров"""
     try:

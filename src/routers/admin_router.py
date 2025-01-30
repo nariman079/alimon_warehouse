@@ -73,7 +73,10 @@ async def create_product(
         raise HTTPException(status_code=400, detail=str(ex))
     return product
     
-@admin_router.get('/v1/admin/products/')
+@admin_router.get(
+    '/v1/admin/products/',
+    response_model=list[ProductListDisplaySchema]
+)
 async def get_products(
     filters: Annotated[ProductFilter, Depends()]
 ):

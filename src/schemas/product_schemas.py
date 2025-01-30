@@ -50,5 +50,12 @@ class ProductDetailDisplaySchema(ProductBaseSchema):
     id: int
     category: CategoryDisplaySchema
     unit: UnitDisplaySchema
+    images: list[ImageDisplaySchema]
 
+class ProductListDisplaySchema(BaseModel):
+    id: int
+    sku: str
+    title: str
+    unit: UnitBaseSchema
+    category: CategoryBaseSchema
 

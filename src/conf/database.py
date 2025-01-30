@@ -10,7 +10,7 @@ from datetime import datetime
 from sqlalchemy import MetaData, Row, Select, func, select
 from sqlalchemy.ext.asyncio import AsyncAttrs, AsyncSession
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from sqlalchemy.exc import IntegrityError, OperationalError
+from sqlalchemy.exc import IntegrityError, OperationalError, InvalidRequestError
 from asyncpg.exceptions import NotNullViolationError, UniqueViolationError
 
 
@@ -64,6 +64,8 @@ def handle_error(func):
                 raise ValueError(f"Значение '{value}' в колонке '{column_name}' отсутствует в таблице '{table_name}'")
             else:
                 raise error
+        except InvalidRequestError as error:
+            raise ValueError(str(error))
     return wrapper
 
 class MappingBase:
@@ -91,6 +93,7 @@ class MappingBase:
         return await db.get_first(cls.select_by_kwargs(*order_by, **kwargs))
 
     @classmethod
+    @handle_error
     async def find_all_by_kwargs(cls, *order_by: Any, **kwargs: Any) -> Sequence[T]:
         return await db.get_all(cls.select_by_kwargs(*order_by, **kwargs))
 
